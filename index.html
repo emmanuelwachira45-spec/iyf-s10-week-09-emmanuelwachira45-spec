@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SocialConnect React</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+import React, { useState } from "react";
+
+/* MAIN APP */
+export default function App() {
+  const [posts, setPosts] = useState([
+    {
+      id: 1,
+      name: "Sarah Jenkins",
+      content: "Welcome to SocialConnect React edition!",
+      likes: 0,
+      comments: []
+    }
+  ]);
+
+  const [text, setText] = useState("");
+
+  // CREATE POST
+  const createPost = () => {
+    if (!text.trim()) return;
+
+    const newPost = {
+      id: Date.now(),
+      name: "Richard (You)",
+      content: text,
+      likes: 0,
+      comments: []
+    };
+
+    setPosts([newPost, ...posts]);
+    setText("");
+  };
+
+  // LIKE POST
+  const likePost = (id) => {
+    setPosts(
+      posts.map((p) =>
+        p.id === id ? { ...p, likes: p.likes + 1 } : p
+      )
+    );
+  };
+
+  // ADD COMMENT
+  const addComment = (id, commentText) => {
+    if (!commentText.trim()) return;
+
+    setPosts(
+      posts.map((p) =>
+        p.id === id
+          ? {
+              ...p,
+              comments: [...p.comments, commentText]
+            }
+          : p
+      )
+    );
+  };
+
+  return (
+    <div style={styles.app}>
+      
+      {/* HEADER */}
+      <header style={styles.header}>
+        <h1>SocialConnect</h1>
+        <p>React Fundamentals Demo</p>
+      </header>
+
+      {/* POST CREATOR */}
+      <div style={styles.card}>
+        <textarea
+          style={styles.textarea}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Share something..."
+        />
+        <button style={styles.button} onClick={createPost}>
+          Post
+        </button>
+      </div>
+
+      {/* FEED */}
+      {posts.map((post) => (
+        <div key={post.id} style={styles.card}>
+          <h3>{post.name}</h3>
+          <p>{post.content}</p>
+
+          <button onClick={() => likePost(post.id)}>
+            👍 Like ({post.likes})
+          </button>
+
+          <CommentSection post={post} addComment={addComment} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* COMMENT COMPONENT */
+function CommentSection({ post, addComment }) {
+  const [comment, setComment] = useState("");
+
+  return (
+    <div style={{ marginTop: "10px" }}>
+      <h4>Comments</h4>
+
+      {post.comments.map((c, i) => (
+        <p key={i}>💬 {c}</p>
+      ))}
+
+      <input
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        placeholder="Write comment..."
+      />
+
+      <button
+        onClick={() => {
+          addComment(post.id, comment);
+          setComment("");
+        }}
+      >
+        Send
+      </button>
+    </div>
+  );
+}
+
+/* SIMPLE STYLES */
+const styles = {
+  app: {
+    fontFamily: "Arial",
+    maxWidth: "600px",
+    margin: "auto",
+    padding: "20px"
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: "20px"
+  },
+  card: {
+    border: "1px solid #ddd",
+    padding: "15px",
+    marginBottom: "15px",
+    borderRadius: "8px"
+  },
+  textarea: {
+    width: "100%",
+    height: "60px",
+    marginBottom: "10px"
+  },
+  button: {
+    padding: "8px 12px",
+    cursor: "pointer"
+  }
+};
