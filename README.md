@@ -1,155 +1,68 @@
-# iyf-s10-week-09-emmanuelwachira45-spec
-import React, { useState } from "react";
+📘 SocialConnect (React Fundamentals)
 
-/* MAIN APP */
-export default function App() {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      name: "Sarah Jenkins",
-      content: "Welcome to SocialConnect React edition!",
-      likes: 0,
-      comments: []
-    }
-  ]);
+🌐 Overview
 
-  const [text, setText] = useState("");
+SocialConnect is a simple social feed application built with React fundamentals. It demonstrates core concepts like components, state management, props, and event handling through a mini social media simulation.
 
-  // CREATE POST
-  const createPost = () => {
-    if (!text.trim()) return;
+⸻
 
-    const newPost = {
-      id: Date.now(),
-      name: "Richard (You)",
-      content: text,
-      likes: 0,
-      comments: []
-    };
+🚀 Features
 
-    setPosts([newPost, ...posts]);
-    setText("");
-  };
+* Create posts in real time
+* Like posts with live updates
+* Add comments under posts
+* Dynamic feed rendering
+* Component-based architecture
+* Simple inline styling for UI
 
-  // LIKE POST
-  const likePost = (id) => {
-    setPosts(
-      posts.map((p) =>
-        p.id === id ? { ...p, likes: p.likes + 1 } : p
-      )
-    );
-  };
+⸻
 
-  // ADD COMMENT
-  const addComment = (id, commentText) => {
-    if (!commentText.trim()) return;
+🛠️ Tech Stack
 
-    setPosts(
-      posts.map((p) =>
-        p.id === id
-          ? {
-              ...p,
-              comments: [...p.comments, commentText]
-            }
-          : p
-      )
-    );
-  };
+* React (Functional Components)
+* JavaScript (ES6+)
+* HTML (via JSX)
+* Inling CSS styling
+⚛️ Core Concepts Used
 
-  return (
-    <div style={styles.app}>
-      
-      {/* HEADER */}
-      <header style={styles.header}>
-        <h1>SocialConnect</h1>
-        <p>React Fundamentals Demo</p>
-      </header>
+1. Components
 
-      {/* POST CREATOR */}
-      <div style={styles.card}>
-        <textarea
-          style={styles.textarea}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Share something..."
-        />
-        <button style={styles.button} onClick={createPost}>
-          Post
-        </button>
-      </div>
+The app is built using reusable components:
 
-      {/* FEED */}
-      {posts.map((post) => (
-        <div key={post.id} style={styles.card}>
-          <h3>{post.name}</h3>
-          <p>{post.content}</p>
+* App → Main feed logic
+* CommentSection → Handles comments per post
 
-          <button onClick={() => likePost(post.id)}>
-            👍 Like ({post.likes})
-          </button>
+⸻
 
-          <CommentSection post={post} addComment={addComment} />
-        </div>
-      ))}
-    </div>
-  );
-}
+2. State Management
 
-/* COMMENT COMPONENT */
-function CommentSection({ post, addComment }) {
-  const [comment, setComment] = useState("");
+React useState is used to manage:
 
-  return (
-    <div style={{ marginTop: "10px" }}>
-      <h4>Comments</h4>
+* Posts
+* Likes
+* Comments
+* Input text
 
-      {post.comments.map((c, i) => (
-        <p key={i}>💬 {c}</p>
-      ))}
+⸻
 
-      <input
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-        placeholder="Write comment..."
-      />
+3. Props
 
-      <button
-        onClick={() => {
-          addComment(post.id, comment);
-          setComment("");
-        }}
-      >
-        Send
-      </button>
-    </div>
-  );
-}
+Data is passed between components using props:
 
-/* SIMPLE STYLES */
-const styles = {
-  app: {
-    fontFamily: "Arial",
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px"
-  },
-  header: {
-    textAlign: "center",
-    marginBottom: "20px"
-  },
-  card: {
-    border: "1px solid #ddd",
-    padding: "15px",
-    marginBottom: "15px",
-    borderRadius: "8px"
-  },
-  textarea: {
-    width: "100%",
-    height: "60px",
-    marginBottom: "10px"
-  },
-  button: {
-    padding: "8px 12px",
-    cursor: "pointer"
-  }
-};
+* Post data passed to CommentSection
+* Functions passed for updating state
+
+⸻
+
+4. Event Handling
+
+User interactions include:
+
+* onClick → liking and posting
+* onChange → typing in inputs
+
+⸻
+
+5. Dynamic Rendering
+
+The feed updates automatically when state changes—no manual DOM manipulation required.
